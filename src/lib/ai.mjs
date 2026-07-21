@@ -68,7 +68,7 @@ export async function aiRequest({ system, prompt, model, temperature = 0.3, spin
 	});
 }
 
-export async function aiStreamRequest({ system, prompt, model, temperature = 0.3, spinnerText = 'Connecting...' }) {
+export async function aiStreamRequest({ system, prompt, model, temperature = 0.3, spinnerText = 'Thinking...' }) {
 	const { client, model: resolvedModel } = getClient(model);
 
 	const { iterator, first } = await spinner(spinnerText, async () => {
