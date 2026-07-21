@@ -2,15 +2,21 @@ import { spinner } from 'zx';
 import OpenAI from 'openai';
 
 export function requireAiConfig(modelOverride) {
+	const baseURL = requireBaseUrl();
+
+	if (!modelOverride && !process.env.ZAID_MODEL) {
+		console.log(chalk.yellow('Model is not set. Pass --model or set ZAID_MODEL.'));
+		process.exit(1);
+	}
+
+	return baseURL;
+}
+
+export function requireBaseUrl() {
 	const baseURL = process.env.ZAID_BASE_URL;
 
 	if (!baseURL) {
 		console.log(chalk.yellow('ZAID_BASE_URL is not set.'));
-		process.exit(1);
-	}
-
-	if (!modelOverride && !process.env.ZAID_MODEL) {
-		console.log(chalk.yellow('Model is not set. Pass --model or set ZAID_MODEL.'));
 		process.exit(1);
 	}
 
@@ -48,6 +54,14 @@ function getClient(modelOverride) {
 
 	const client = new OpenAI({ baseURL, apiKey });
 	return { client, model };
+}
+
+export function getRawClient() {
+	const baseURL = requireBaseUrl();
+	const apiKey = process.env.ZAID_API_KEY || 'local';
+
+	const client = new OpenAI({ baseURL, apiKey });
+	return { client, baseURL };
 }
 
 export async function aiRequest({ system, prompt, model, temperature = 0.3, spinnerText = 'Thinking...' }) {

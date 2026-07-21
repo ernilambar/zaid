@@ -30,6 +30,8 @@ export ZAID_MODEL="<model-name>"  # optional if passing --model per command
 | `nepali-writer "<text>"` | Translate text into Nepali (Devanagari script) |
 | `summarize <url\|file\|"text">` | Summarize a URL, local text file, or direct text as bullet points |
 | `zai "<question>" [--system "<prompt>"]` | Ask a general question, optionally overriding the system prompt |
+| `zaid-connect` | Check that the configured endpoint is reachable |
+| `zaid-models` | List models available from the configured endpoint |
 
 All commands accept `--model <name>` and `--temperature <n>`. Use `--help` on any command for usage and examples.
 

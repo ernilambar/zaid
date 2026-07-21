@@ -21,7 +21,9 @@
     "regex": "./src/scripts/regex.mjs",
     "shell-cmd": "./src/scripts/shell-cmd.mjs",
     "summarize": "./src/scripts/summarize.mjs",
-    "zai": "./src/scripts/zai.mjs"
+    "zai": "./src/scripts/zai.mjs",
+    "zaid-connect": "./src/scripts/zaid-connect.mjs",
+    "zaid-models": "./src/scripts/zaid-models.mjs"
   },
   "scripts": {},
   "dependencies": {
