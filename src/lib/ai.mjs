@@ -9,7 +9,7 @@ function getClient(modelOverride) {
 		process.exit(1);
 	}
 
-	const apiKey = process.env.ZAID_API_KEY;
+	const apiKey = process.env.ZAID_API_KEY || 'local';
 	const model = modelOverride || process.env.ZAID_MODEL;
 
 	if (!model) {

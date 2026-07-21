@@ -25,7 +25,6 @@
       "Bash(which *)"
     ],
     "deny": [
-      "Bash(chmod *)",
       "Bash(git checkout -- *)",
       "Bash(git push *)",
       "Bash(git reset *)",
