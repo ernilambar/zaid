@@ -61,7 +61,7 @@ if (single && /^https?:\/\//i.test(single)) {
 	}
 }
 
-text = text.trim().slice(0, 12000);
+text = text.trim().slice(0, 8000);
 
 if (!text) {
 	console.log(chalk.yellow('summarize: no readable text found.'));
@@ -70,7 +70,8 @@ if (!text) {
 
 const systemPrompt =
 	'Summarize the following content. First line: a short title (3-6 words, no punctuation, no "Summary:" prefix). ' +
-	'Blank line. Then 5-8 concise bullet points, each capturing one distinct key point. ' +
+	'Blank line. Then up to 8 concise bullet points, one per distinct key point actually present in the source. ' +
+	'Use fewer bullets for short or simple content — never pad, repeat, or split a single point just to fill a quota. ' +
 	'Be specific — avoid vague or generic statements. No preamble, no other text.';
 
 await aiStreamRequest({
