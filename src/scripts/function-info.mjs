@@ -57,4 +57,4 @@ One sentence stating it was not found, then list 3-5 real, similar PHP functions
 No filler. No extra sections. Code in fenced blocks.`;
 
 console.log(chalk.bold.cyan(`\n${inputPrompt}\n`));
-await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature });
+await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.2 });

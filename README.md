@@ -28,6 +28,7 @@ export ZAID_MODEL="<model-name>"  # optional if passing --model per command
 | `pr-summary [diff-file]` | Generate a PR title and summary from a git diff |
 | `regex "<pattern>"` | Explain a regex pattern with valid/invalid examples |
 | `nepali-writer "<text>"` | Translate text into Nepali (Devanagari script) |
+| `zai "<question>" [--system "<prompt>"]` | Ask a general question, optionally overriding the system prompt |
 
 All commands accept `--model <name>` and `--temperature <n>`. Use `--help` on any command for usage and examples.
 

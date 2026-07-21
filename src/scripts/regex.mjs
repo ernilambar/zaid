@@ -31,4 +31,4 @@ const systemPrompt = `You are a regex expert. For the given regex pattern, respo
 No filler. No extra sections.`;
 
 console.log(chalk.bold.cyan(`\n${inputPrompt}\n`));
-await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature });
+await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.2 });

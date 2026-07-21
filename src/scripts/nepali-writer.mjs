@@ -30,5 +30,5 @@ const systemPrompt =
 	'If translating, preserve the tone and style of the source exactly. ' +
 	'Output only the Nepali text — no explanations, no labels, no extra commentary.';
 
-const result = await aiRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature });
+const result = await aiRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.2 });
 console.log(result);

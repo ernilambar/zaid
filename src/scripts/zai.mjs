@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+import 'zx/globals';
+import { aiStreamRequest, getInput, printHelp } from '../lib/ai.mjs';
+
+if (argv.help || argv.h) {
+	printHelp({
+		name: 'zai',
+		description: 'Ask a general question and get an AI response.',
+		usage: 'zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>]',
+		examples: [
+			'zai "What is the difference between TCP and UDP?"',
+			'zai "Rewrite this sentence formally: hey can u send the file" --system "You are a concise editor."',
+		],
+	});
+}
+
+const inputPrompt = getInput('Usage: zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>]');
+const { model, temperature, system } = argv;
+
+const defaultSystemPrompt =
+	'Answer directly and concisely. No preamble, no filler, no unnecessary hedging. ' +
+	'Use short paragraphs or bullet points when it aids clarity. Stay on topic.';
+
+console.log(chalk.bold.cyan(`\n${inputPrompt}\n`));
+await aiStreamRequest({ system: system || defaultSystemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.3 });
