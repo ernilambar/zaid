@@ -69,8 +69,9 @@ if (!text) {
 }
 
 const systemPrompt =
-	'Summarize the following content as 5-8 concise bullet points. Each bullet should capture one distinct key point. ' +
-	'Be specific — avoid vague or generic statements. Do not include any preamble.';
+	'Summarize the following content. First line: a short title (3-6 words, no punctuation, no "Summary:" prefix). ' +
+	'Blank line. Then 5-8 concise bullet points, each capturing one distinct key point. ' +
+	'Be specific — avoid vague or generic statements. No preamble, no other text.';
 
 await aiStreamRequest({
 	system: systemPrompt,
