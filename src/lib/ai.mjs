@@ -2,9 +2,20 @@ import { spinner } from 'zx';
 import OpenAI from 'openai';
 
 function getClient(modelOverride) {
-	const baseURL = process.env.ZAID_BASE_URL || 'http://localhost:11434/v1';
-	const apiKey = process.env.ZAID_API_KEY || 'local-no-key-required';
-	const model = modelOverride || process.env.ZAID_MODEL || 'llama3.2';
+	const baseURL = process.env.ZAID_BASE_URL;
+
+	if (!baseURL) {
+		console.log(chalk.yellow('ZAID_BASE_URL is not set.'));
+		process.exit(1);
+	}
+
+	const apiKey = process.env.ZAID_API_KEY;
+	const model = modelOverride || process.env.ZAID_MODEL;
+
+	if (!model) {
+		console.log(chalk.yellow('Model is not set. Pass --model or set ZAID_MODEL.'));
+		process.exit(1);
+	}
 
 	const client = new OpenAI({ baseURL, apiKey });
 	return { client, model };
