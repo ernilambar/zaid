@@ -25,11 +25,8 @@ requireAiConfig(model);
 const single = argv._.length === 1 ? argv._[0] : null;
 
 let text;
-let label;
 
 if (single && /^https?:\/\//i.test(single)) {
-	label = single;
-
 	let html;
 	try {
 		html = await spinner('Fetching...', async () => {
@@ -58,10 +55,8 @@ if (single && /^https?:\/\//i.test(single)) {
 	}
 
 	if (fileValid) {
-		label = single;
 		text = await fs.readFile(single, 'utf8');
 	} else {
-		label = 'direct input';
 		text = argv._.join(' ');
 	}
 }
@@ -76,8 +71,6 @@ if (!text) {
 const systemPrompt =
 	'Summarize the following content as 5-8 concise bullet points. Each bullet should capture one distinct key point. ' +
 	'Be specific — avoid vague or generic statements. Do not include any preamble.';
-
-console.log(chalk.bold.cyan(`\n${label}\n`));
 
 await aiStreamRequest({
 	system: systemPrompt,

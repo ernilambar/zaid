@@ -71,8 +71,8 @@ export async function aiRequest({ system, prompt, model, temperature = 0.3, spin
 export async function aiStreamRequest({ system, prompt, model, temperature = 0.3, spinnerText = 'Connecting...' }) {
 	const { client, model: resolvedModel } = getClient(model);
 
-	const stream = await spinner(spinnerText, async () => {
-		return await client.chat.completions.create({
+	const { iterator, first } = await spinner(spinnerText, async () => {
+		const stream = await client.chat.completions.create({
 			model: resolvedModel,
 			stream: true,
 			temperature,
@@ -81,14 +81,23 @@ export async function aiStreamRequest({ system, prompt, model, temperature = 0.3
 				{ role: 'user', content: prompt },
 			],
 		});
+
+		const iterator = stream[Symbol.asyncIterator]();
+		return { iterator, first: await iterator.next() };
 	});
 
 	let fullContent = '';
 
-	for await (const chunk of stream) {
+	const write = (chunk) => {
 		const text = chunk.choices[0]?.delta?.content || '';
 		process.stdout.write(text);
 		fullContent += text;
+	};
+
+	let result = first;
+	while (!result.done) {
+		write(result.value);
+		result = await iterator.next();
 	}
 
 	process.stdout.write('\n');
