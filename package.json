@@ -1,11 +1,24 @@
 {
   "name": "zaid",
   "version": "1.0.0",
-  "description": "",
+  "description": "AI-powered CLI toolkit for shell commands, PHP/WordPress lookups, PR summaries, regex explanations, and Nepali translation.",
   "license": "MIT",
   "type": "module",
+  "author": "Nilambar Sharma",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ernilambar/zaid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ernilambar/zaid/issues"
+  },
+  "homepage": "https://github.com/ernilambar/zaid#readme",
   "bin": {
-    "nepali-writer": "./src/scripts/nepali-writer.mjs"
+    "function-info": "./src/scripts/function-info.mjs",
+    "nepali-writer": "./src/scripts/nepali-writer.mjs",
+    "pr-summary": "./src/scripts/pr-summary.mjs",
+    "regex": "./src/scripts/regex.mjs",
+    "shell-cmd": "./src/scripts/shell-cmd.mjs"
   },
   "scripts": {},
   "dependencies": {

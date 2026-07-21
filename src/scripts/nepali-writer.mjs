@@ -1,7 +1,19 @@
 #!/usr/bin/env zx
 
 const scriptPath = fs.realpathSync(process.argv[2]);
-const { aiRequest } = await import(path.join(path.dirname(scriptPath), '../lib/ai.mjs'));
+const { aiRequest, printHelp } = await import(path.join(path.dirname(scriptPath), '../lib/ai.mjs'));
+
+if (argv.help || argv.h) {
+	printHelp({
+		name: 'nepali-writer',
+		description: 'Translate text into Nepali (Devanagari script).',
+		usage: 'nepali-writer "<text>" [--model <name>] [--temperature <n>]',
+		examples: [
+			'nepali-writer "Hello, how are you?"',
+			'nepali-writer "The meeting is scheduled for tomorrow."',
+		],
+	});
+}
 
 const inputPrompt = argv._.join(' ');
 const { model, temperature } = argv;
