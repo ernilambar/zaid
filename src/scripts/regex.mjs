@@ -1,7 +1,6 @@
-#!/usr/bin/env zx
-
-const scriptPath = fs.realpathSync(process.argv[2]);
-const { aiStreamRequest, getInput, printHelp } = await import(path.join(path.dirname(scriptPath), '../lib/ai.mjs'));
+#!/usr/bin/env node
+import 'zx/globals';
+import { aiStreamRequest, getInput, printHelp } from '../lib/ai.mjs';
 
 if (argv.help || argv.h) {
 	printHelp({
