@@ -14,6 +14,7 @@
   "author": "Nilambar Sharma",
   "type": "module",
   "bin": {
+    "email-writer": "./src/scripts/email-writer.mjs",
     "explain-error": "./src/scripts/explain-error.mjs",
     "function-info": "./src/scripts/function-info.mjs",
     "nepali-writer": "./src/scripts/nepali-writer.mjs",
