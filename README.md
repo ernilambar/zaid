@@ -26,6 +26,7 @@ export ZAID_MODEL="<model-name>"  # optional if passing --model per command
 | `shell-cmd "<description>"` | Convert plain English into a shell command |
 | `function-info <name>` | Explain a PHP function or WordPress hook/action/filter |
 | `pr-summary [diff-file]` | Generate a PR title and summary from a git diff |
+| `proofread "<text>"` | Proofread text and return corrected output, preserving format |
 | `regex "<pattern>"` | Explain a regex pattern with valid/invalid examples |
 | `nepali-writer "<text>"` | Translate text into Nepali (Devanagari script) |
 | `summarize <url\|file\|"text">` | Summarize a URL, local text file, or direct text as bullet points |

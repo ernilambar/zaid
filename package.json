@@ -18,6 +18,7 @@
     "function-info": "./src/scripts/function-info.mjs",
     "nepali-writer": "./src/scripts/nepali-writer.mjs",
     "pr-summary": "./src/scripts/pr-summary.mjs",
+    "proofread": "./src/scripts/proofread.mjs",
     "regex": "./src/scripts/regex.mjs",
     "shell-cmd": "./src/scripts/shell-cmd.mjs",
     "summarize": "./src/scripts/summarize.mjs",
