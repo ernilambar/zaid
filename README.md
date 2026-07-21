@@ -19,6 +19,23 @@ export ZAID_API_KEY="<api-key>"   # optional, defaults to "local"
 export ZAID_MODEL="<model-name>"  # optional if passing --model per command
 ```
 
+### Examples
+
+**OpenAI**
+
+```bash
+export ZAID_BASE_URL="https://api.openai.com/v1"
+export ZAID_API_KEY="<openai-api-key>"
+export ZAID_MODEL="gpt-4o-mini"
+```
+
+**Ollama** (local)
+
+```bash
+export ZAID_BASE_URL="http://localhost:11434/v1"
+export ZAID_MODEL="llama3.1"
+```
+
 ## Commands
 
 | Command | Description |
