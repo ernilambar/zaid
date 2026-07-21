@@ -20,10 +20,13 @@
     "pr-summary": "./src/scripts/pr-summary.mjs",
     "regex": "./src/scripts/regex.mjs",
     "shell-cmd": "./src/scripts/shell-cmd.mjs",
+    "summarize": "./src/scripts/summarize.mjs",
     "zai": "./src/scripts/zai.mjs"
   },
   "scripts": {},
   "dependencies": {
+    "@mozilla/readability": "^0.6.0",
+    "jsdom": "^29.1.1",
     "openai": "^6.48.0",
     "zx": "^8.8.5"
   }
