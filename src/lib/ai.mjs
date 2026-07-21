@@ -83,7 +83,13 @@ export async function aiStreamRequest({ system, prompt, model, temperature = 0.3
 		});
 
 		const iterator = stream[Symbol.asyncIterator]();
-		return { iterator, first: await iterator.next() };
+
+		let result = await iterator.next();
+		while (!result.done && !result.value.choices[0]?.delta?.content) {
+			result = await iterator.next();
+		}
+
+		return { iterator, first: result };
 	});
 
 	let fullContent = '';
