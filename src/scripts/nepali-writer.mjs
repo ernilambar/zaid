@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, printHelp } from '../lib/ai.mjs';
+import { aiRequest, getInput, printHelp } from '../lib/ai.mjs';
 
 if (argv.help || argv.h) {
 	printHelp({
@@ -14,13 +14,8 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = argv._.join(' ');
+const inputPrompt = await getInput('Usage: nepali-writer "<text>" [--model <name>] [--temperature <n>]');
 const { model, temperature } = argv;
-
-if (!inputPrompt) {
-	console.log(chalk.yellow('Usage: nepali-writer "<text>" [--model <name>] [--temperature <n>]'));
-	process.exit(0);
-}
 
 const systemPrompt =
 	'You are an expert Nepali writer and translator. ' +

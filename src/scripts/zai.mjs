@@ -14,7 +14,7 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = getInput('Usage: zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>]');
+const inputPrompt = await getInput('Usage: zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>]');
 const { model, temperature, system } = argv;
 
 const defaultSystemPrompt =

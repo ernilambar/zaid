@@ -35,6 +35,10 @@ export ZAID_MODEL="<model-name>"  # optional if passing --model per command
 
 All commands accept `--model <name>` and `--temperature <n>`. Use `--help` on any command for usage and examples.
 
-## License
+Commands that take free-text input also accept it piped via stdin when no argument is given, e.g. `cat error.log | explain-error`.
 
-MIT
+## Copyright and License
+
+This project is licensed under the [MIT](http://opensource.org/licenses/MIT).
+
+2026 &copy; [Nilambar Sharma](https://www.nilambar.net).

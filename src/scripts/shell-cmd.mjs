@@ -14,7 +14,7 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = getInput('Usage: shell-cmd "<description>" [--model <name>] [--temperature <n>]');
+const inputPrompt = await getInput('Usage: shell-cmd "<description>" [--model <name>] [--temperature <n>]');
 const { model, temperature } = argv;
 
 const systemPrompt =

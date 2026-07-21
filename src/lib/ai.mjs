@@ -36,8 +36,16 @@ export function printHelp({ name, description, usage, examples }) {
 	process.exit(0);
 }
 
-export function getInput(usage) {
-	const text = argv._.join(' ');
+export async function getInput(usage) {
+	let text = argv._.join(' ');
+
+	if (!text && !process.stdin.isTTY) {
+		const chunks = [];
+		for await (const chunk of process.stdin) {
+			chunks.push(chunk);
+		}
+		text = Buffer.concat(chunks).toString('utf8').trim();
+	}
 
 	if (!text) {
 		console.log(chalk.yellow(usage));

@@ -14,7 +14,7 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = getInput('Usage: function-info <function-or-hook> [--model <name>] [--temperature <n>]');
+const inputPrompt = await getInput('Usage: function-info <function-or-hook> [--model <name>] [--temperature <n>]');
 const { model, temperature } = argv;
 
 const systemPrompt = `You are a PHP and WordPress expert. The user will provide a PHP function or WordPress hook/action/filter name. If the name ends with "()" it explicitly refers to the function — do NOT cover the hook variant.

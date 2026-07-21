@@ -14,7 +14,7 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = getInput('Usage: regex "<pattern>" [--model <name>] [--temperature <n>]');
+const inputPrompt = await getInput('Usage: regex "<pattern>" [--model <name>] [--temperature <n>]');
 const { model, temperature } = argv;
 
 const systemPrompt = `You are a regex expert. For the given regex pattern, respond with exactly three sections:

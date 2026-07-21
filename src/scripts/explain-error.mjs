@@ -14,7 +14,7 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = getInput('Usage: explain-error "<error output>" [--model <name>] [--temperature <n>]');
+const inputPrompt = await getInput('Usage: explain-error "<error output>" [--model <name>] [--temperature <n>]');
 const { model, temperature } = argv;
 
 const systemPrompt =
