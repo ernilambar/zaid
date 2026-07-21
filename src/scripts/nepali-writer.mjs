@@ -1,6 +1,7 @@
 #!/usr/bin/env zx
 
-import { aiRequest } from '../lib/ai.mjs';
+const scriptPath = fs.realpathSync(process.argv[2]);
+const { aiRequest } = await import(path.join(path.dirname(scriptPath), '../lib/ai.mjs'));
 
 const inputPrompt = argv._.join(' ');
 const { model, temperature } = argv;
