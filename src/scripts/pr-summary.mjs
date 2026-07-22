@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiStreamRequest, requireAiConfig, printHelp } from '../lib/ai.mjs';
+import { aiStreamRequest, requireAiConfig, printHelp, printJson, fail } from '../lib/ai.mjs';
 
 if (argv.help || argv.h) {
 	printHelp({
 		name: 'pr-summary',
 		description: 'Generate a PR title and summary from a git diff.',
-		usage: 'pr-summary [path-to-diff-file] [--model <name>] [--temperature <n>]',
+		usage: 'pr-summary [path-to-diff-file] [--model <name>] [--temperature <n>] [--json]',
 		examples: [
 			'pr-summary',
 			'pr-summary changes.diff',
@@ -14,13 +14,14 @@ if (argv.help || argv.h) {
 	});
 }
 
-const { model, temperature } = argv;
+const { model, temperature, json } = argv;
 
-requireAiConfig(model);
+requireAiConfig(model, json);
 
 let diffContent;
 
 const arg = argv._[0];
+const source = arg || 'git';
 
 if (arg) {
 	let fileValid = false;
@@ -30,16 +31,14 @@ if (arg) {
 	} catch {}
 
 	if (!fileValid) {
-		console.log(chalk.yellow(`pr-summary: not a valid file: ${arg}`));
-		process.exit(1);
+		fail(`pr-summary: not a valid file: ${arg}`, json);
 	}
 
 	diffContent = await fs.readFile(arg, 'utf8');
 } else {
 	const isGitRepo = await $`git rev-parse --git-dir`.quiet().catch(() => null);
 	if (!isGitRepo) {
-		console.log(chalk.yellow('pr-summary: not inside a git repository.'));
-		process.exit(1);
+		fail('pr-summary: not inside a git repository.', json);
 	}
 
 	const mergeBase = await $`git merge-base HEAD main`.quiet().catch(() => null);
@@ -53,7 +52,11 @@ if (arg) {
 diffContent = diffContent.trim();
 
 if (!diffContent) {
-	console.log(chalk.yellow('pr-summary: no diff found.'));
+	if (json) {
+		printJson({ error: 'pr-summary: no diff found.' });
+	} else {
+		console.log(chalk.yellow('pr-summary: no diff found.'));
+	}
 	process.exit(0);
 }
 
@@ -70,4 +73,8 @@ const systemPrompt = `You are an expert developer. Given a git diff, output a PR
 
 Rules: title under 60 chars. Each bullet under 14 words — action verb + what changed, nothing else. 4 bullets max. No sub-bullets, no explanations, no preamble, no trailing text.`;
 
-await aiStreamRequest({ system: systemPrompt, prompt: diffContent, model, temperature: temperature ?? 0.4 });
+const result = await aiStreamRequest({ system: systemPrompt, prompt: diffContent, model, temperature: temperature ?? 0.4, json });
+
+if (json) {
+	printJson({ source, output: result.content, model: result.model, usage: result.usage });
+}

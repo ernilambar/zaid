@@ -3,13 +3,13 @@ import 'zx/globals';
 import { spinner } from 'zx';
 import { JSDOM } from 'jsdom';
 import { Readability } from '@mozilla/readability';
-import { aiStreamRequest, requireAiConfig, printHelp } from '../lib/ai.mjs';
+import { aiStreamRequest, requireAiConfig, printHelp, printJson, fail } from '../lib/ai.mjs';
 
 if (argv.help || argv.h) {
 	printHelp({
 		name: 'summarize',
 		description: 'Summarize a URL, local text file, or direct text as bullet points.',
-		usage: 'summarize <url|file|"text"> [--model <name>] [--temperature <n>]',
+		usage: 'summarize <url|file|"text"> [--model <name>] [--temperature <n>] [--json]',
 		examples: [
 			'summarize https://example.com/article',
 			'summarize notes.txt',
@@ -18,27 +18,29 @@ if (argv.help || argv.h) {
 	});
 }
 
-const { model, temperature } = argv;
+const { model, temperature, json } = argv;
 
-requireAiConfig(model);
+requireAiConfig(model, json);
 
 const single = argv._.length === 1 ? argv._[0] : null;
 
 let text;
+let source;
 
 if (single && /^https?:\/\//i.test(single)) {
+	source = single;
 	let html;
 	try {
-		html = await spinner('Fetching...', async () => {
+		const fetchHtml = async () => {
 			const response = await fetch(single);
 			if (!response.ok) {
 				throw new Error(`${response.status} ${response.statusText}`);
 			}
 			return await response.text();
-		});
+		};
+		html = json ? await fetchHtml() : await spinner('Fetching...', fetchHtml);
 	} catch (error) {
-		console.log(chalk.yellow(`summarize: failed to fetch: ${error.message}`));
-		process.exit(1);
+		fail(`summarize: failed to fetch: ${error.message}`, json);
 	}
 
 	const dom = new JSDOM(html, { url: single });
@@ -55,8 +57,10 @@ if (single && /^https?:\/\//i.test(single)) {
 	}
 
 	if (fileValid) {
+		source = single;
 		text = await fs.readFile(single, 'utf8');
 	} else {
+		source = 'text';
 		text = argv._.join(' ');
 	}
 }
@@ -64,8 +68,7 @@ if (single && /^https?:\/\//i.test(single)) {
 text = text.trim().slice(0, 8000);
 
 if (!text) {
-	console.log(chalk.yellow('summarize: no readable text found.'));
-	process.exit(1);
+	fail('summarize: no readable text found.', json);
 }
 
 const systemPrompt =
@@ -74,10 +77,15 @@ const systemPrompt =
 	'Use fewer bullets for short or simple content — never pad, repeat, or split a single point just to fill a quota. ' +
 	'Be specific — avoid vague or generic statements. No preamble, no other text.';
 
-await aiStreamRequest({
+const result = await aiStreamRequest({
 	system: systemPrompt,
 	prompt: text,
 	model,
 	temperature: temperature ?? 0.3,
 	spinnerText: 'Summarising...',
+	json,
 });
+
+if (json) {
+	printJson({ source, output: result.content, model: result.model, usage: result.usage });
+}

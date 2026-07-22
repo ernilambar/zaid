@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, getInput, printHelp } from '../lib/ai.mjs';
+import { aiRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
 
 if (argv.help || argv.h) {
 	printHelp({
 		name: 'proofread',
 		description: 'Proofread text and return corrected output, preserving format.',
-		usage: 'proofread "<text>" [--model <name>] [--temperature <n>]',
+		usage: 'proofread "<text>" [--model <name>] [--temperature <n>] [--json]',
 		examples: [
 			'proofread "Their are many reasons why this is importent."',
 			'cat draft.md | proofread',
@@ -14,8 +14,8 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = await getInput('Usage: proofread "<text>" [--model <name>] [--temperature <n>]');
-const { model, temperature } = argv;
+const { model, temperature, json } = argv;
+const inputPrompt = await getInput('Usage: proofread "<text>" [--model <name>] [--temperature <n>] [--json]', json);
 
 const systemPrompt =
 	"You are an expert proofreader. Apply minimal edits: correct grammar, spelling, and punctuation; improve clarity only when necessary. Preserve the author's meaning, point of view, and general structure. Do not recast the text into another genre or rewrite for flow unless a phrase is genuinely unclear. " +
@@ -36,8 +36,13 @@ const result = await aiRequest({
 	model,
 	temperature: temperature ?? 0.2,
 	spinnerText: 'Proofreading...',
+	json,
 });
 
-console.log(inputPrompt);
-console.log(chalk.dim('─'.repeat(64)));
-console.log(result);
+if (json) {
+	printJson({ input: inputPrompt, output: result.content, model: result.model, usage: result.usage });
+} else {
+	console.log(inputPrompt);
+	console.log(chalk.dim('─'.repeat(64)));
+	console.log(result);
+}

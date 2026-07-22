@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiStreamRequest, getInput, printHelp } from '../lib/ai.mjs';
+import { aiStreamRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
 
 if (argv.help || argv.h) {
 	printHelp({
 		name: 'regex',
 		description: 'Explain a regex pattern with valid and invalid match examples.',
-		usage: 'regex "<pattern>" [--model <name>] [--temperature <n>]',
+		usage: 'regex "<pattern>" [--model <name>] [--temperature <n>] [--json]',
 		examples: [
 			'regex "^\\d{4}-\\d{2}-\\d{2}$"',
 			'regex "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"',
@@ -14,8 +14,8 @@ if (argv.help || argv.h) {
 	});
 }
 
-const inputPrompt = await getInput('Usage: regex "<pattern>" [--model <name>] [--temperature <n>]');
-const { model, temperature } = argv;
+const { model, temperature, json } = argv;
+const inputPrompt = await getInput('Usage: regex "<pattern>" [--model <name>] [--temperature <n>] [--json]', json);
 
 const systemPrompt = `You are a regex expert. For the given regex pattern, respond with exactly three sections:
 
@@ -30,5 +30,12 @@ const systemPrompt = `You are a regex expert. For the given regex pattern, respo
 
 No filler. No extra sections.`;
 
-console.log(chalk.bold.cyan(`\n${inputPrompt}\n`));
-await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.2 });
+if (!json) {
+	console.log(chalk.bold.cyan(`\n${inputPrompt}\n`));
+}
+
+const result = await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.2, json });
+
+if (json) {
+	printJson({ input: inputPrompt, output: result.content, model: result.model, usage: result.usage });
+}

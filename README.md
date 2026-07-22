@@ -52,7 +52,7 @@ export ZAID_MODEL="llama3.1"
 | `zaid-connect` | Check that the configured endpoint is reachable |
 | `zaid-models` | List models available from the configured endpoint |
 
-All commands accept `--model <name>` and `--temperature <n>`. Use `--help` on any command for usage and examples.
+All commands accept `--model <name>` and `--temperature <n>`. All commands accept `--json` to print a single-line JSON object (no spinner, no streaming) instead of formatted output. Use `--help` on any command for usage and examples.
 
 Commands that take free-text input also accept it piped via stdin when no argument is given, e.g. `cat error.log | explain-error`.
 
