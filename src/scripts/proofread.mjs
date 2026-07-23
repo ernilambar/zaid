@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'proofread',
-		description: 'Proofread text and return corrected output, preserving format.',
-		usage: 'proofread "<text>" [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'proofread "Their are many reasons why this is importent."',
-			'cat draft.md | proofread',
-		],
-	});
-}
+const usage = 'proofread "<text>" [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'proofread',
+	description: 'Proofread text and return corrected output, preserving format.',
+	usage,
+	examples: [
+		'proofread "Their are many reasons why this is importent."',
+		'cat draft.md | proofread',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: proofread "<text>" [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt =
 	"You are an expert proofreader. Apply minimal edits: correct grammar, spelling, and punctuation; improve clarity only when necessary. Preserve the author's meaning, point of view, and general structure. Do not recast the text into another genre or rewrite for flow unless a phrase is genuinely unclear. " +

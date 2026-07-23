@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiStreamRequest, requireAiConfig, printHelp, printJson, fail } from '../lib/ai.mjs';
+import { aiStreamRequest, requireAiConfig, printJson, fail } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'pr-summary',
-		description: 'Generate a PR title and summary from a git diff.',
-		usage: 'pr-summary [path-to-diff-file] [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'pr-summary',
-			'pr-summary changes.diff',
-		],
-	});
-}
+const argv = buildCli({
+	name: 'pr-summary',
+	description: 'Generate a PR title and summary from a git diff.',
+	usage: 'pr-summary [path-to-diff-file] [--model <name>] [--temperature <n>] [--json]',
+	examples: [
+		'pr-summary',
+		'pr-summary changes.diff',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
 

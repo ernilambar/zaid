@@ -3,20 +3,20 @@ import 'zx/globals';
 import { spinner } from 'zx';
 import { JSDOM } from 'jsdom';
 import { Readability } from '@mozilla/readability';
-import { aiStreamRequest, requireAiConfig, printHelp, printJson, fail } from '../lib/ai.mjs';
+import { aiStreamRequest, requireAiConfig, printJson, fail } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'summarize',
-		description: 'Summarize a URL, local text file, or direct text as bullet points.',
-		usage: 'summarize <url|file|"text"> [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'summarize https://example.com/article',
-			'summarize notes.txt',
-			'summarize "paste your text here"',
-		],
-	});
-}
+const argv = buildCli({
+	name: 'summarize',
+	description: 'Summarize a URL, local text file, or direct text as bullet points.',
+	usage: 'summarize <url|file|"text"> [--model <name>] [--temperature <n>] [--json]',
+	examples: [
+		'summarize https://example.com/article',
+		'summarize notes.txt',
+		'summarize "paste your text here"',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
 

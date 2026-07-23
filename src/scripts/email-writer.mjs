@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'email-writer',
-		description: 'Compose a formal email from notes or a rough draft.',
-		usage: 'email-writer "<notes or draft>" [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'email-writer "tell client the deadline moved to friday, need their assets by wednesday"',
-			'cat notes.txt | email-writer',
-		],
-	});
-}
+const usage = 'email-writer "<notes or draft>" [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'email-writer',
+	description: 'Compose a formal email from notes or a rough draft.',
+	usage,
+	examples: [
+		'email-writer "tell client the deadline moved to friday, need their assets by wednesday"',
+		'cat notes.txt | email-writer',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: email-writer "<notes or draft>" [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt =
 	'You are an expert email writer. Transform the given notes, bullet points, or rough draft into a polished, well-written email. ' +

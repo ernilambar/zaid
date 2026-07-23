@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiStreamRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiStreamRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'function-info',
-		description: 'Explain a PHP function or WordPress hook/action/filter.',
-		usage: 'function-info <function-or-hook> [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'function-info array_map',
-			'function-info wp_head',
-		],
-	});
-}
+const usage = 'function-info <function-or-hook> [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'function-info',
+	description: 'Explain a PHP function or WordPress hook/action/filter.',
+	usage,
+	examples: [
+		'function-info array_map',
+		'function-info wp_head',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: function-info <function-or-hook> [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt = `You are a PHP and WordPress expert. The user will provide a PHP function or WordPress hook/action/filter name. If the name ends with "()" it explicitly refers to the function — do NOT cover the hook variant.
 

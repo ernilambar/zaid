@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiStreamRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiStreamRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'regex',
-		description: 'Explain a regex pattern with valid and invalid match examples.',
-		usage: 'regex "<pattern>" [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'regex "^\\d{4}-\\d{2}-\\d{2}$"',
-			'regex "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"',
-		],
-	});
-}
+const usage = 'regex "<pattern>" [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'regex',
+	description: 'Explain a regex pattern with valid and invalid match examples.',
+	usage,
+	examples: [
+		'regex "^\\d{4}-\\d{2}-\\d{2}$"',
+		'regex "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: regex "<pattern>" [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt = `You are a regex expert. For the given regex pattern, respond with exactly three sections:
 

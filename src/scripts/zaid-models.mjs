@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { getRawClient, printHelp, printJson } from '../lib/ai.mjs';
+import { getRawClient, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'zaid-models',
-		description: 'List models available from the configured endpoint.',
-		usage: 'zaid-models [--json]',
-		examples: ['zaid-models'],
-	});
-}
+const argv = buildCli({
+	name: 'zaid-models',
+	description: 'List models available from the configured endpoint.',
+	usage: 'zaid-models [--json]',
+	examples: ['zaid-models'],
+	options: { json: commonOptions.json },
+});
 
 const { json } = argv;
 const { client } = getRawClient(json);

@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 import 'zx/globals';
 import { spinner } from 'zx';
-import { getRawClient, printHelp, printJson } from '../lib/ai.mjs';
+import { getRawClient, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'zaid-connect',
-		description: 'Check that the configured endpoint is reachable.',
-		usage: 'zaid-connect [--json]',
-		examples: ['zaid-connect'],
-	});
-}
+const argv = buildCli({
+	name: 'zaid-connect',
+	description: 'Check that the configured endpoint is reachable.',
+	usage: 'zaid-connect [--json]',
+	examples: ['zaid-connect'],
+	options: { json: commonOptions.json },
+});
 
 const { json } = argv;
 const { client, baseURL } = getRawClient(json);

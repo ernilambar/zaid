@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'nepali-writer',
-		description: 'Translate text into Nepali (Devanagari script).',
-		usage: 'nepali-writer "<text>" [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'nepali-writer "Hello, how are you?"',
-			'nepali-writer "The meeting is scheduled for tomorrow."',
-		],
-	});
-}
+const usage = 'nepali-writer "<text>" [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'nepali-writer',
+	description: 'Translate text into Nepali (Devanagari script).',
+	usage,
+	examples: [
+		'nepali-writer "Hello, how are you?"',
+		'nepali-writer "The meeting is scheduled for tomorrow."',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: nepali-writer "<text>" [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt =
 	'You are an expert Nepali writer and translator. ' +

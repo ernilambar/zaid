@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'explain-error',
-		description: 'Analyze error output and get a concise explanation with a fix.',
-		usage: 'explain-error "<error output>" [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'explain-error "npm ERR! code ENOENT"',
-			'explain-error "$(cat error.log)"',
-		],
-	});
-}
+const usage = 'explain-error "<error output>" [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'explain-error',
+	description: 'Analyze error output and get a concise explanation with a fix.',
+	usage,
+	examples: [
+		'explain-error "npm ERR! code ENOENT"',
+		'explain-error "$(cat error.log)"',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: explain-error "<error output>" [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt =
 	'You are an expert CLI troubleshooting assistant. Analyze the error output and respond with: ' +

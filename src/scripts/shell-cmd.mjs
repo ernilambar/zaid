@@ -1,21 +1,23 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'shell-cmd',
-		description: 'Convert a plain-English description into a shell command.',
-		usage: 'shell-cmd "<description>" [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'shell-cmd "list all files modified in the last 7 days"',
-			'shell-cmd "find duplicate lines in a file"',
-		],
-	});
-}
+const usage = 'shell-cmd "<description>" [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'shell-cmd',
+	description: 'Convert a plain-English description into a shell command.',
+	usage,
+	examples: [
+		'shell-cmd "list all files modified in the last 7 days"',
+		'shell-cmd "find duplicate lines in a file"',
+	],
+	options: commonOptions,
+});
 
 const { model, temperature, json } = argv;
-const inputPrompt = await getInput('Usage: shell-cmd "<description>" [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const systemPrompt =
 	'You are a macOS shell command expert. Convert the user description to a single shell command. ' +

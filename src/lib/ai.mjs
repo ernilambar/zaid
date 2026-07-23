@@ -34,20 +34,7 @@ export function requireBaseUrl(json = false) {
 	return baseURL;
 }
 
-export function printHelp({ name, description, usage, examples }) {
-	console.log(`${chalk.bold(name)} — ${description}`);
-	console.log('');
-	console.log(chalk.bold('Usage:'));
-	console.log(`  ${usage}`);
-	console.log('');
-	console.log(chalk.bold('Examples:'));
-	for (const example of examples) {
-		console.log(`  ${example}`);
-	}
-	process.exit(0);
-}
-
-export async function getInput(usage, json = false) {
+export async function getInput(argv, usage) {
 	let text = argv._.join(' ');
 
 	if (!text && !process.stdin.isTTY) {
@@ -59,7 +46,7 @@ export async function getInput(usage, json = false) {
 	}
 
 	if (!text) {
-		if (json) {
+		if (argv.json) {
 			printJson({ error: usage });
 		} else {
 			console.log(chalk.yellow(usage));

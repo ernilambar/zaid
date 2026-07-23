@@ -1,21 +1,26 @@
 #!/usr/bin/env node
 import 'zx/globals';
-import { aiStreamRequest, getInput, printHelp, printJson } from '../lib/ai.mjs';
+import { aiStreamRequest, getInput, printJson } from '../lib/ai.mjs';
+import { buildCli, commonOptions } from '../lib/cli.mjs';
 
-if (argv.help || argv.h) {
-	printHelp({
-		name: 'zai',
-		description: 'Ask a general question and get an AI response.',
-		usage: 'zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>] [--json]',
-		examples: [
-			'zai "What is the difference between TCP and UDP?"',
-			'zai "Rewrite this sentence formally: hey can u send the file" --system "You are a concise editor."',
-		],
-	});
-}
+const usage = 'zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>] [--json]';
+
+const argv = buildCli({
+	name: 'zai',
+	description: 'Ask a general question and get an AI response.',
+	usage,
+	examples: [
+		'zai "What is the difference between TCP and UDP?"',
+		'zai "Rewrite this sentence formally: hey can u send the file" --system "You are a concise editor."',
+	],
+	options: {
+		...commonOptions,
+		system: { type: 'string', describe: 'Override the default system prompt' },
+	},
+});
 
 const { model, temperature, system, json } = argv;
-const inputPrompt = await getInput('Usage: zai "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>] [--json]', json);
+const inputPrompt = await getInput(argv, `Usage: ${usage}`);
 
 const defaultSystemPrompt =
 	'Answer directly and concisely. No preamble, no filler, no unnecessary hedging. ' +
