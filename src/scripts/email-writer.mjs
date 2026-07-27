@@ -12,6 +12,7 @@ const argv = buildCli({
 	examples: [
 		'email-writer "tell client the deadline moved to friday, need their assets by wednesday"',
 		'cat notes.txt | email-writer',
+		'email-writer <<\'EOF\'\n- multi-line notes with "quotes" or $vars are safe here\nEOF',
 	],
 	options: commonOptions,
 });
