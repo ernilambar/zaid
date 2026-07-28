@@ -38,23 +38,33 @@ export ZAID_MODEL="llama3.1"
 
 ## Commands
 
+All commands run through the single `zaid` binary: `zaid <command> ...`. Run `zaid --help` to list them, or `zaid <command> --help` for usage and examples.
+
 | Command | Description |
 | --- | --- |
-| `shell-cmd "<description>"` | Convert plain English into a shell command |
-| `function-info <name>` | Explain a PHP function or WordPress hook/action/filter |
-| `pr-summary [diff-file]` | Generate a PR title and summary from a git diff |
-| `proofread "<text>"` | Proofread text and return corrected output, preserving format |
-| `email-writer "<notes or draft>"` | Compose a formal email from notes or a rough draft |
-| `regex "<pattern>"` | Explain a regex pattern with valid/invalid examples |
-| `nepali-writer "<text>"` | Translate text into Nepali (Devanagari script) |
-| `summarize <url\|file\|"text">` | Summarize a URL, local text file, or direct text as bullet points |
-| `zai "<question>" [--system "<prompt>"]` | Ask a general question, optionally overriding the system prompt |
-| `zaid-connect` | Check that the configured endpoint is reachable |
-| `zaid-models` | List models available from the configured endpoint |
+| `zaid ask "<question>" [--system "<prompt>"]` | Ask a general question, optionally overriding the system prompt |
+| `zaid shell-cmd "<description>" [--os <macos\|linux\|windows>]` | Convert plain English into a shell command, targeting your OS by default |
+| `zaid function-info <name>` | Explain a PHP function or WordPress hook/action/filter |
+| `zaid pr-summary [diff-file]` | Generate a PR title and summary from a git diff |
+| `zaid proofread "<text>"` | Proofread text and return corrected output, preserving format |
+| `zaid email-writer "<notes or draft>"` | Compose a formal email from notes or a rough draft |
+| `zaid regex "<pattern>"` | Explain a regex pattern with valid/invalid examples |
+| `zaid nepali-writer "<text>"` | Translate text into Nepali (Devanagari script) |
+| `zaid summarize <url\|file\|"text">` | Summarize a URL, local text file, or direct text as bullet points |
+| `zaid explain-error "<error output>"` | Analyze error output and get a concise explanation with a fix |
+| `zaid status [--models]` | Check that the configured endpoint is reachable, optionally listing model IDs |
 
-All commands accept `--model <name>` and `--temperature <n>`. All commands accept `--json` to print a single-line JSON object (no spinner, no streaming) instead of formatted output. Use `--help` on any command for usage and examples.
+All commands accept `--model <name>` and `--temperature <n>`. All commands accept `--json` to print a single-line JSON object (no spinner, no streaming) instead of formatted output.
 
-Commands that take free-text input also accept it piped via stdin when no argument is given, e.g. `cat error.log | explain-error`.
+Commands that take free-text input also accept it piped via stdin when no argument is given, e.g. `cat error.log | zaid explain-error`.
+
+## Development
+
+```bash
+npm test           # run tests (node:test)
+npm run lint        # check code style (standard)
+npm run format      # auto-fix code style (standard --fix)
+```
 
 ## Copyright and License
 
