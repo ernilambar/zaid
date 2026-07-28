@@ -1,9 +1,6 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
-const { version, description } = require('../../package.json')
+import { version, description } from './meta.mjs'
 
 export const commonOptions = {
   model: { type: 'string', describe: 'Model name to use for this request' },

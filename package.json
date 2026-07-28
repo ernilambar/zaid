@@ -19,11 +19,12 @@
   "scripts": {
     "format": "standard --fix",
     "lint": "standard",
-    "test": "node --test"
+    "test": "node --test",
+    "compile": "bun build ./src/scripts/zaid.mjs --compile --outfile zaid"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
-    "jsdom": "^29.1.1",
+    "linkedom": "^0.18.13",
     "openai": "^6.48.0",
     "yargs": "^18.0.0",
     "zx": "^8.8.5"

@@ -22,6 +22,7 @@ Thumbs.db
 
 # Ignored extensions
 *.bak
+*.bun-build
 *.cache
 *.diff
 *.err
@@ -41,3 +42,6 @@ Thumbs.db
 /deploy/
 /node_modules/
 /vendor/
+
+# Compiled binary
+/zaid
