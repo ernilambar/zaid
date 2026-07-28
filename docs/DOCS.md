@@ -68,10 +68,11 @@ cat draft.md | zaid proofread
 
 ## regex
 
-Explain a regex pattern with valid and invalid match examples.
+Convert a plain-English description into a regex pattern.
 
 ```bash
-zaid regex "^\d{4}-\d{2}-\d{2}$"
+zaid regex "a date in YYYY-MM-DD format"
+zaid regex "a valid email address"
 ```
 
 ## shell-cmd

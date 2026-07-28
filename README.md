@@ -71,7 +71,7 @@ All commands run through the single `zaid` binary: `zaid <command> ...`. Run `za
 | `zaid pr-summary [diff-file]` | Generate a PR title and summary from a git diff |
 | `zaid proofread "<text>"` | Proofread text and return corrected output, preserving format |
 | `zaid email-writer "<notes or draft>"` | Compose a formal email from notes or a rough draft |
-| `zaid regex "<pattern>"` | Explain a regex pattern with valid/invalid examples |
+| `zaid regex "<description>"` | Convert a plain-English description into a regex pattern |
 | `zaid nepali-writer "<text>"` | Translate text into Nepali (Devanagari script) |
 | `zaid summarize <url\|file\|"text">` | Summarize a URL, local text file, or direct text as bullet points |
 | `zaid explain-error "<error output>"` | Analyze error output and get a concise explanation with a fix |
@@ -105,7 +105,7 @@ bun src/index.mjs function-info wp_head
 bun src/index.mjs pr-summary
 bun src/index.mjs proofread "Their are many reasons why this is importent."
 bun src/index.mjs email-writer "tell client the deadline moved to friday"
-bun src/index.mjs regex "^\d{4}-\d{2}-\d{2}$"
+bun src/index.mjs regex "a date in YYYY-MM-DD format"
 bun src/index.mjs nepali-writer "Hello, how are you?"
 bun src/index.mjs summarize https://example.com/article
 bun src/index.mjs explain-error "npm ERR! code ENOENT"
