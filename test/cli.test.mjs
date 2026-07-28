@@ -1,0 +1,83 @@
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+
+const CLI = fileURLToPath(new URL('../src/scripts/zaid.mjs', import.meta.url))
+
+const SUBCOMMANDS = [
+  'ask',
+  'shell-cmd',
+  'function-info',
+  'pr-summary',
+  'proofread',
+  'email-writer',
+  'regex',
+  'nepali-writer',
+  'summarize',
+  'explain-error',
+  'status'
+]
+
+function cleanEnv (overrides = {}) {
+  const { ZAID_BASE_URL, ZAID_MODEL, ZAID_API_KEY, ...rest } = process.env
+  return { ...rest, ...overrides }
+}
+
+function run (args, { input = '', env } = {}) {
+  return spawnSync(process.execPath, [CLI, ...args], {
+    encoding: 'utf8',
+    input,
+    env: env ?? cleanEnv()
+  })
+}
+
+test('top-level help lists every subcommand', () => {
+  const result = run(['--help'])
+  assert.equal(result.status, 0)
+  for (const name of SUBCOMMANDS) {
+    assert.match(result.stdout, new RegExp(`zaid ${name}\\b`))
+  }
+})
+
+test('an unknown top-level command exits with an error', () => {
+  const result = run(['bogus-command'])
+  assert.equal(result.status, 1)
+  assert.match(result.stderr, /Unknown argument/)
+})
+
+test('every subcommand --help exits cleanly with usage text', () => {
+  for (const name of SUBCOMMANDS) {
+    const result = run([name, '--help'])
+    assert.equal(result.status, 0, `${name} --help should exit 0`)
+    assert.match(result.stdout, /Usage:/)
+  }
+})
+
+test('status reports a clear JSON error when ZAID_BASE_URL is unset', () => {
+  const result = run(['status', '--json'])
+  assert.equal(result.status, 1)
+  assert.deepEqual(JSON.parse(result.stdout), { error: 'ZAID_BASE_URL is not set.' })
+})
+
+test('ask with no argument and no piped stdin prints usage and exits 0', () => {
+  const result = run(['ask'])
+  assert.equal(result.status, 0)
+  assert.match(result.stdout, /Usage: zaid ask/)
+})
+
+test('pr-summary rejects a nonexistent diff file before touching the network', () => {
+  const result = run(['pr-summary', '/nonexistent/path.diff', '--json'], {
+    env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+  })
+  assert.equal(result.status, 1)
+  assert.deepEqual(JSON.parse(result.stdout), { error: 'pr-summary: not a valid file: /nonexistent/path.diff' })
+})
+
+test('summarize fails fast when there is no readable text', () => {
+  const result = run(['summarize', '--json'], {
+    env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+  })
+  assert.equal(result.status, 1)
+  assert.deepEqual(JSON.parse(result.stdout), { error: 'summarize: no readable text found.' })
+})

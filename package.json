@@ -14,25 +14,31 @@
   "author": "Nilambar Sharma",
   "type": "module",
   "bin": {
-    "email-writer": "./src/scripts/email-writer.mjs",
-    "explain-error": "./src/scripts/explain-error.mjs",
-    "function-info": "./src/scripts/function-info.mjs",
-    "nepali-writer": "./src/scripts/nepali-writer.mjs",
-    "pr-summary": "./src/scripts/pr-summary.mjs",
-    "proofread": "./src/scripts/proofread.mjs",
-    "regex": "./src/scripts/regex.mjs",
-    "shell-cmd": "./src/scripts/shell-cmd.mjs",
-    "summarize": "./src/scripts/summarize.mjs",
-    "zai": "./src/scripts/zai.mjs",
-    "zaid-connect": "./src/scripts/zaid-connect.mjs",
-    "zaid-models": "./src/scripts/zaid-models.mjs"
+    "zaid": "./src/scripts/zaid.mjs"
   },
-  "scripts": {},
+  "scripts": {
+    "format": "standard --fix",
+    "lint": "standard",
+    "test": "node --test"
+  },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
     "jsdom": "^29.1.1",
     "openai": "^6.48.0",
     "yargs": "^18.0.0",
     "zx": "^8.8.5"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "standard": {
+    "globals": [
+      "$",
+      "chalk",
+      "fs"
+    ]
   }
 }
