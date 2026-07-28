@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
-const CLI = fileURLToPath(new URL('../src/scripts/zaid.mjs', import.meta.url))
+const CLI = fileURLToPath(new URL('../src/index.mjs', import.meta.url))
 
 const SUBCOMMANDS = [
   'ask',

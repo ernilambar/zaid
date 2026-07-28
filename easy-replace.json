@@ -1,0 +1,10 @@
+{
+  "easyReplaceInFiles": [
+    {
+      "files": "src/lib/meta.mjs",
+      "from": "export const version = '(.+)'",
+      "type": "regex",
+      "to": "export const version = '$$package__version$$'"
+    }
+  ]
+}
