@@ -4,7 +4,7 @@ AI-powered CLI toolkit. Single `zaid` binary dispatching to yargs command module
 
 ## Architecture
 
-- `src/scripts/zaid.mjs` — entry point. Imports every command module and registers them with `runCli()`.
+- `src/index.mjs` — entry point. Imports every command module and registers them with `runCli()`.
 - `src/commands/*.mjs` — one file per subcommand. Each exports `command`, `describe`, `builder(yargs)`, `handler(argv)`.
 - `src/lib/ai.mjs` — shared OpenAI-compatible client helpers: `aiRequest`/`aiStreamRequest` (non-stream/stream chat completions), `getInput` (positional text or stdin fallback), `requireAiConfig`/`requireBaseUrl` (env validation, exit on failure), `printJson`/`fail`.
 - `src/lib/cli.mjs` — `runCli(commands)` builds the top-level yargs parser (strict mode, `--help`/`--version`); `commonOptions` (`--model`, `--temperature`, `--json`) shared across commands.

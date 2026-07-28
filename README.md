@@ -1,12 +1,35 @@
 # zaid
 
-AI-powered CLI toolkit for everyday tasks.
+AI-powered CLI toolkit.
 
-## Install
+## Install / Upgrade
+
+**macOS** — Homebrew:
 
 ```bash
+brew tap ernilambar/tap
+brew trust ernilambar/tap
+brew install ernilambar/tap/zaid
+```
+
+**macOS** — prebuilt binary (replace `arm64` with `amd64` for Intel Macs):
+
+```bash
+curl -fL -o zaid https://github.com/ernilambar/zaid/releases/latest/download/zaid-darwin-arm64
+xattr -d com.apple.quarantine zaid 2>/dev/null || true
+chmod +x zaid
+sudo mv zaid /usr/local/bin/
+zaid --version
+```
+
+**From source** (requires Node.js 22+ and [Bun](https://bun.sh)):
+
+```bash
+git clone https://github.com/ernilambar/zaid.git
+cd zaid
 bun install
-bun link
+bun run compile
+sudo mv zaid /usr/local/bin/
 ```
 
 ## Configure
@@ -58,13 +81,35 @@ All commands accept `--model <name>` and `--temperature <n>`. All commands accep
 
 Commands that take free-text input also accept it piped via stdin when no argument is given, e.g. `cat error.log | zaid explain-error`.
 
+See [docs/DOCS.md](docs/DOCS.md) for detailed examples of every command.
+
 ## Development
+
+After cloning and `bun install`, run `bun link` to make the `zaid` command available on your PATH pointing at the source, instead of `bun run compile`.
 
 ```bash
 bun test           # run tests (node:test)
 bun run lint        # check code style (standard)
 bun run format      # auto-fix code style (standard --fix)
 bun run compile     # build a standalone binary (./zaid)
+```
+
+### Manual Testing
+
+Before opening a PR, verify the key commands against the real CLI:
+
+```bash
+bun src/index.mjs ask "What is the capital of France?"
+bun src/index.mjs shell-cmd "list files modified in the last 7 days"
+bun src/index.mjs function-info wp_head
+bun src/index.mjs pr-summary
+bun src/index.mjs proofread "Their are many reasons why this is importent."
+bun src/index.mjs email-writer "tell client the deadline moved to friday"
+bun src/index.mjs regex "^\d{4}-\d{2}-\d{2}$"
+bun src/index.mjs nepali-writer "Hello, how are you?"
+bun src/index.mjs summarize https://example.com/article
+bun src/index.mjs explain-error "npm ERR! code ENOENT"
+bun src/index.mjs status
 ```
 
 ## Release
