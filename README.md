@@ -5,8 +5,8 @@ AI-powered CLI toolkit for everyday tasks.
 ## Install
 
 ```bash
-npm install
-npm link
+bun install
+bun link
 ```
 
 ## Configure
@@ -61,9 +61,19 @@ Commands that take free-text input also accept it piped via stdin when no argume
 ## Development
 
 ```bash
-npm test           # run tests (node:test)
-npm run lint        # check code style (standard)
-npm run format      # auto-fix code style (standard --fix)
+bun test           # run tests (node:test)
+bun run lint        # check code style (standard)
+bun run format      # auto-fix code style (standard --fix)
+bun run compile     # build a standalone binary (./zaid)
+```
+
+## Release
+
+Tags must be prefixed with `v` (e.g. `v1.0.1`). The release workflow triggers on `v*` tags only — an unprefixed tag like `1.0.1` will not build or publish binaries.
+
+```bash
+git tag v1.0.1
+git push origin v1.0.1
 ```
 
 ## Copyright and License

@@ -1,6 +1,6 @@
 import 'zx/globals'
 import { spinner } from 'zx'
-import { JSDOM } from 'jsdom'
+import { parseHTML } from 'linkedom'
 import { Readability } from '@mozilla/readability'
 import { aiStreamRequest, requireAiConfig, printJson, fail } from '../lib/ai.mjs'
 import { commonOptions } from '../lib/cli.mjs'
@@ -45,8 +45,8 @@ export async function handler (argv) {
       fail(`summarize: failed to fetch: ${error.message}`, json)
     }
 
-    const dom = new JSDOM(html, { url: single })
-    const article = new Readability(dom.window.document).parse()
+    const { document } = parseHTML(html)
+    const article = new Readability(document).parse()
     text = article?.textContent || ''
   } else {
     let fileValid = false
