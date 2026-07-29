@@ -99,14 +99,14 @@ bun run compile     # build a standalone binary (./zaid)
 Before opening a PR, verify the key commands against the real CLI:
 
 ```bash
-bun src/index.mjs ask "What is the capital of France?"
-bun src/index.mjs shell-cmd "list files modified in the last 7 days"
-bun src/index.mjs function-info wp_head
+bun src/index.mjs ask "What is the capital of Nepal?"
+bun src/index.mjs shell-cmd "list files ordered by file size"
+bun src/index.mjs function-info "wp_head()"
 bun src/index.mjs pr-summary
 bun src/index.mjs proofread "Their are many reasons why this is importent."
 bun src/index.mjs email-writer "tell client the deadline moved to friday"
 bun src/index.mjs regex "a date in YYYY-MM-DD format"
-bun src/index.mjs nepali-writer "Hello, how are you?"
+bun src/index.mjs nepali-writer "Hello, how are you? Nice to meet you."
 bun src/index.mjs summarize https://example.com/article
 bun src/index.mjs explain-error "npm ERR! code ENOENT"
 bun src/index.mjs status
