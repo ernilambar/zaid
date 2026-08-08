@@ -28,7 +28,7 @@ export async function handler (argv) {
         'The email MUST open with exactly "Hi," on its own line, followed by a blank line. ' +
         'The email MUST close with exactly "Regards," on its own line at the end. ' +
         'Do not include a name after "Regards,". Do not add subject lines, headers, or signatures beyond the closing. ' +
-        'Body: concise, well-organized paragraphs. Preserve the intent and all factual details from the input. Improve clarity, grammar, and flow. Do not invent facts, names, dates, or commitments not present in the input. ' +
+        'Body: match the length and detail of the input — do not pad, add filler sentences, or introduce context/pleasantries not implied by the input. A one-sentence input should produce a one-to-two-sentence body, not multiple paragraphs. Preserve the intent and all factual details from the input. Improve clarity, grammar, and flow. Do not invent facts, names, dates, or commitments not present in the input. ' +
         'Output only the email text. No preamble, no explanation, no code fences.'
 
   const userPrompt = `Write a formal email based on the following notes or draft. Open with "Hi," and close with "Regards,". Output only the email.
