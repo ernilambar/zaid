@@ -89,6 +89,6 @@ export async function handler (argv) {
   })
 
   if (json) {
-    printJson({ source, output: result.content, model: result.model, usage: result.usage })
+    printJson({ input: text, source, output: result.content, model: result.model, usage: result.usage })
   }
 }

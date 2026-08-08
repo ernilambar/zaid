@@ -53,12 +53,7 @@ export async function handler (argv) {
   diffContent = diffContent.trim()
 
   if (!diffContent) {
-    if (json) {
-      printJson({ error: 'pr-summary: no diff found.' })
-    } else {
-      console.log(chalk.yellow('pr-summary: no diff found.'))
-    }
-    process.exit(0)
+    fail('pr-summary: no diff found.', json)
   }
 
   diffContent = diffContent.slice(0, 12000)
@@ -77,6 +72,6 @@ Rules: title under 60 chars. Each bullet under 14 words — action verb + what c
   const result = await aiStreamRequest({ system: systemPrompt, prompt: diffContent, model, temperature: temperature ?? 0.4, json })
 
   if (json) {
-    printJson({ source, output: result.content, model: result.model, usage: result.usage })
+    printJson({ input: diffContent, source, output: result.content, model: result.model, usage: result.usage })
   }
 }

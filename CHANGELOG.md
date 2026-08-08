@@ -1,5 +1,8 @@
 # Zaid Changelog
 
+## 1.0.2 - 2026-08-08
+- Fixed: pr-summary and summarize --json output now include the input field
+
 ## 1.0.1 - 2026-07-28
 - Changed: regex command now generates a pattern from a plain-English description
 

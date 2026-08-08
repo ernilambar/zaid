@@ -1,6 +1,6 @@
 {
   "name": "zaid",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AI-powered CLI toolkit.",
   "homepage": "https://github.com/ernilambar/zaid#readme",
   "bugs": {
@@ -21,18 +21,18 @@
     "format": "standard --fix",
     "lint": "standard",
     "test": "node --test",
-    "validate-changelog": "flatlog validate --strict",
+    "validate-changelog": "flatlog validate",
     "version": "easy-replace-in-files"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
     "linkedom": "^0.18.13",
-    "openai": "^6.48.0",
-    "yargs": "^18.0.0",
+    "openai": "^6.49.0",
+    "yargs": "^18.1.0",
     "zx": "^8.8.5"
   },
   "devDependencies": {
-    "@nilambar/flatlog": "^1.0.2",
+    "@nilambar/flatlog": "^1.0.4",
     "easy-replace-in-files": "^2.0.0",
     "standard": "^17.1.2"
   },

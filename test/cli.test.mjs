@@ -2,6 +2,9 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import { mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 
 const CLI = fileURLToPath(new URL('../src/index.mjs', import.meta.url))
 
@@ -24,11 +27,12 @@ function cleanEnv (overrides = {}) {
   return { ...rest, ...overrides }
 }
 
-function run (args, { input = '', env } = {}) {
+function run (args, { input = '', env, cwd } = {}) {
   return spawnSync(process.execPath, [CLI, ...args], {
     encoding: 'utf8',
     input,
-    env: env ?? cleanEnv()
+    env: env ?? cleanEnv(),
+    cwd
   })
 }
 
@@ -72,6 +76,21 @@ test('pr-summary rejects a nonexistent diff file before touching the network', (
   })
   assert.equal(result.status, 1)
   assert.deepEqual(JSON.parse(result.stdout), { error: 'pr-summary: not a valid file: /nonexistent/path.diff' })
+})
+
+test('pr-summary reports no diff found as a JSON error, not silent success', () => {
+  const repoDir = mkdtempSync(join(tmpdir(), 'zaid-pr-summary-'))
+  try {
+    spawnSync('git', ['init', '-q'], { cwd: repoDir })
+    const result = run(['pr-summary', '--json'], {
+      cwd: repoDir,
+      env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+    })
+    assert.equal(result.status, 1)
+    assert.deepEqual(JSON.parse(result.stdout), { error: 'pr-summary: no diff found.' })
+  } finally {
+    rmSync(repoDir, { recursive: true, force: true })
+  }
 })
 
 test('summarize fails fast when there is no readable text', () => {
