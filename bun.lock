@@ -7,12 +7,12 @@
       "dependencies": {
         "@mozilla/readability": "^0.6.0",
         "linkedom": "^0.18.13",
-        "openai": "^6.48.0",
-        "yargs": "^18.0.0",
+        "openai": "^6.49.0",
+        "yargs": "^18.1.0",
         "zx": "^8.8.5",
       },
       "devDependencies": {
-        "@nilambar/flatlog": "^1.0.2",
+        "@nilambar/flatlog": "^1.0.4",
         "easy-replace-in-files": "^2.0.0",
         "standard": "^17.1.2",
       },
@@ -39,7 +39,7 @@
 
     "@mozilla/readability": ["@mozilla/readability@0.6.0", "https://npmproxy.autoproxxy.com:2443/ask-in-opers-wbudsfo9i2e98e9wdu7s98grt9ui32rew/@mozilla/readability/-/readability-0.6.0.tgz", {}, "sha512-juG5VWh4qAivzTAeMzvY9xs9HY5rAcr2E4I7tiSSCokRFi7XIZCAu92ZkSTsIj1OPceCifL3cpfteP3pDT9/QQ=="],
 
-    "@nilambar/flatlog": ["@nilambar/flatlog@1.0.2", "", { "dependencies": { "minimist": "^1.2.8" }, "bin": { "flatlog": "bin/flatlog.js" } }, "sha512-q4RiC5moBE31qxyEIpYv5i3UYJQLIpzA+kG2mWtyoCIYDfLX8kH1oXdgrb5YzF4D1pnaYrMSeD1mzctDDOUHnQ=="],
+    "@nilambar/flatlog": ["@nilambar/flatlog@1.0.4", "", { "dependencies": { "minimist": "^1.2.8" }, "bin": { "flatlog": "bin/flatlog.js" } }, "sha512-ODV4VtjNvRHKQVNuD5EMRfv+15DpaSlHxsNCMaPd/0VD1y0mcuLW3pK6+KOcn9aP59O7ory0j1IEc5yij4Kr3Q=="],
 
     "@nodelib/fs.scandir": ["@nodelib/fs.scandir@2.1.5", "https://npmproxy.autoproxxy.com:2443/ask-in-opers-wbudsfo9i2e98e9wdu7s98grt9ui32rew/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz", { "dependencies": { "@nodelib/fs.stat": "2.0.5", "run-parallel": "^1.1.9" } }, "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="],
 

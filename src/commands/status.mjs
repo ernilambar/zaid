@@ -32,7 +32,7 @@ export async function handler (argv) {
     const count = models.length
 
     if (json) {
-      const payload = { base_url: baseURL, model: process.env.ZAID_MODEL || null, connected: true, model_count: count }
+      const payload = { baseUrl: baseURL, configuredModel: process.env.ZAID_MODEL || null, connected: true, modelCount: count }
       if (showModels) {
         payload.models = models.map((m) => m.id)
       }
@@ -47,7 +47,7 @@ export async function handler (argv) {
     }
   } catch (error) {
     if (json) {
-      printJson({ base_url: baseURL, model: process.env.ZAID_MODEL || null, connected: false, error: error.message })
+      printJson({ baseUrl: baseURL, configuredModel: process.env.ZAID_MODEL || null, connected: false, error: error.message })
     } else {
       console.log(chalk.red(`zaid status: failed to reach ${baseURL}: ${error.message}`))
     }
