@@ -109,6 +109,14 @@ zaid pr-summary changes.diff
 `input` — the diff actually sent, truncated to 12000 chars.
 `source` — where the diff came from: a file path, or `"git"` when read from `git diff`.
 
+### Diffing against main when changes are already committed
+
+If the auto-detected git diff misses committed changes, generate the diff file explicitly and pass it in:
+
+```bash
+git diff main > changes.diff && zaid pr-summary changes.diff
+```
+
 ## proofread
 
 Proofread text and return corrected output, preserving format.
