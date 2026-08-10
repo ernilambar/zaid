@@ -96,26 +96,33 @@ zaid nepali-writer "Hello, how are you?"
 Generate a PR title and summary from a git diff.
 
 ```bash
-zaid pr-summary
-zaid pr-summary changes.diff
+zaid pr-summary                       # diff against auto-detected base branch
+zaid pr-summary changes.diff          # diff from a file instead of git
+zaid pr-summary --base trunk          # diff against a specific local base branch
+zaid pr-summary --base origin/trunk   # diff against the remote's current state, not your local branch
+zaid pr-summary --json                # machine-readable output, e.g. for piping into a PR-creation script
 ```
+
+Diffs from the merge-base of the current branch and the base branch, so committed and uncommitted changes are both picked up.
+
+The base branch is auto-detected from `origin/HEAD` (falling back to `origin/main`/`origin/master`/`main`/`master`); pass `--base <branch>` to override.
+
+- **No `--base`, standard repo:** works out of the box — auto-detection resolves `origin/HEAD` and diffs your branch against it. Nothing to configure.
+- **`--base <local-branch>` (e.g. `trunk`, `develop`):** use when your default branch isn't `main`/`master`, or you want to diff against something other than the default (a release branch, a parent feature branch, etc.). Diffs against your local copy of that branch — if it's behind the remote, the diff will be too.
+- **`--base origin/<branch>`:** use when your local branch tracking the base might be stale (haven't pulled recently) but you don't want to `git pull` first — diffs against the remote's current state directly.
+- **Unrelated-history base:** if `--base` names a branch with no shared history with `HEAD` (e.g. a different orphan branch), the command fails with an error rather than silently falling back to an uncommitted-only diff — you'll know immediately the base you gave doesn't make sense here.
+- **`--json`:** suppresses the `Comparing: <base>..HEAD` status line and streaming output, printing a single JSON object instead — for scripting (CI, git hooks, PR-description generators).
 
 **JSON output:**
 
 ```json
-{ "input": "...", "source": "git", "output": "...", "model": "gpt-4o-mini", "usage": { "prompt_tokens": 12, "completion_tokens": 34, "total_tokens": 46 } }
+{ "input": "...", "source": "git", "base": "origin/main", "compare": "origin/main..HEAD", "output": "...", "model": "gpt-4o-mini", "usage": { "prompt_tokens": 12, "completion_tokens": 34, "total_tokens": 46 } }
 ```
 
 `input` — the diff actually sent, truncated to 12000 chars.
 `source` — where the diff came from: a file path, or `"git"` when read from `git diff`.
-
-### Diffing against main when changes are already committed
-
-If the auto-detected git diff misses committed changes, generate the diff file explicitly and pass it in:
-
-```bash
-git diff main > changes.diff && zaid pr-summary changes.diff
-```
+`base` — the resolved base branch, or `null` when using a file, or when no base could be auto-detected (falls back to working-tree diff).
+`compare` — the comparison performed, e.g. `"origin/main..HEAD"`, or `"working-tree (no base branch detected — pass --base to diff against a branch)"` when auto-detection found nothing; `null` when using a file.
 
 ## proofread
 

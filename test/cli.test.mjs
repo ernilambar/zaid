@@ -93,6 +93,46 @@ test('pr-summary reports no diff found as a JSON error, not silent success', () 
   }
 })
 
+test('pr-summary rejects a nonexistent --base branch before touching the network', () => {
+  const repoDir = mkdtempSync(join(tmpdir(), 'zaid-pr-summary-'))
+  try {
+    spawnSync('git', ['init', '-q'], { cwd: repoDir })
+    const result = run(['pr-summary', '--base', 'doesnotexist', '--json'], {
+      cwd: repoDir,
+      env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+    })
+    assert.equal(result.status, 1)
+    assert.deepEqual(JSON.parse(result.stdout), { error: 'pr-summary: base branch not found: doesnotexist' })
+  } finally {
+    rmSync(repoDir, { recursive: true, force: true })
+  }
+})
+
+test('pr-summary errors when an explicit --base shares no history with HEAD', () => {
+  const repoDir = mkdtempSync(join(tmpdir(), 'zaid-pr-summary-'))
+  try {
+    const git = (args) => spawnSync('git', args, { cwd: repoDir })
+    git(['init', '-q'])
+    git(['config', 'user.email', 't@t.com'])
+    git(['config', 'user.name', 't'])
+    git(['checkout', '-q', '-b', 'base-branch'])
+    git(['commit', '-q', '--allow-empty', '-m', 'on branch a'])
+    git(['checkout', '-q', '--orphan', 'unrelated'])
+    git(['commit', '-q', '--allow-empty', '-m', 'on branch b'])
+
+    const result = run(['pr-summary', '--base', 'base-branch', '--json'], {
+      cwd: repoDir,
+      env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+    })
+    assert.equal(result.status, 1)
+    assert.deepEqual(JSON.parse(result.stdout), {
+      error: "pr-summary: could not compute merge-base with 'base-branch' (no shared history?)."
+    })
+  } finally {
+    rmSync(repoDir, { recursive: true, force: true })
+  }
+})
+
 test('summarize fails fast when there is no readable text', () => {
   const result = run(['summarize', '--json'], {
     env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
