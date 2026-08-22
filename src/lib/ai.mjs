@@ -5,6 +5,12 @@ export function printJson (data) {
   console.log(JSON.stringify(data))
 }
 
+export function echoInput (text) {
+  if (process.stdout.isTTY) {
+    console.log(chalk.bold.cyan(`\n${text}\n`))
+  }
+}
+
 export function fail (message, json = false) {
   if (json) {
     printJson({ error: message })

@@ -1,5 +1,5 @@
 import 'zx/globals'
-import { aiRequest, getInput, printJson } from '../lib/ai.mjs'
+import { aiRequest, echoInput, getInput, printJson } from '../lib/ai.mjs'
 import { commonOptions } from '../lib/cli.mjs'
 
 const usage = 'zaid proofread "<text>" [--model <name>] [--temperature <n>] [--json]'
@@ -45,8 +45,7 @@ ${inputPrompt}`
   if (json) {
     printJson({ input: inputPrompt, output: result.content, model: result.model, usage: result.usage })
   } else {
-    console.log(inputPrompt)
-    console.log(chalk.dim('─'.repeat(64)))
+    echoInput(inputPrompt)
     console.log(result)
   }
 }
