@@ -1,5 +1,5 @@
 import 'zx/globals'
-import { aiStreamRequest, getInput, printJson } from '../lib/ai.mjs'
+import { aiStreamRequest, echoInput, getInput, printJson } from '../lib/ai.mjs'
 import { commonOptions } from '../lib/cli.mjs'
 
 const usage = 'zaid function-info <function-or-hook> [--model <name>] [--temperature <n>] [--json]'
@@ -60,7 +60,7 @@ One sentence stating it was not found, then list 3-5 real, similar PHP functions
 No filler. No extra sections. Code in fenced blocks.`
 
   if (!json) {
-    console.log(chalk.bold.cyan(`\n${inputPrompt}\n`))
+    echoInput(inputPrompt)
   }
 
   const result = await aiStreamRequest({ system: systemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.2, json })

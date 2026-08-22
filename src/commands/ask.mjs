@@ -1,5 +1,5 @@
 import 'zx/globals'
-import { aiStreamRequest, getInput, printJson } from '../lib/ai.mjs'
+import { aiStreamRequest, echoInput, getInput, printJson } from '../lib/ai.mjs'
 import { commonOptions } from '../lib/cli.mjs'
 
 const usage = 'zaid ask "<question>" [--system "<prompt>"] [--model <name>] [--temperature <n>] [--json]'
@@ -28,7 +28,7 @@ export async function handler (argv) {
         'Use short paragraphs or bullet points when it aids clarity. Stay on topic.'
 
   if (!json) {
-    console.log(chalk.bold.cyan(`\n${inputPrompt}\n`))
+    echoInput(inputPrompt)
   }
 
   const result = await aiStreamRequest({ system: system || defaultSystemPrompt, prompt: inputPrompt, model, temperature: temperature ?? 0.3, json })

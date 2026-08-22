@@ -1,8 +1,8 @@
 # Zaid Changelog
 
-## X.X.X - YYYY-MM-DD
-
+## 1.0.4 - 2026-08-22
 - Changed: clarify the task for "nepali-writer" command
+- Changed: echo command input only on TTY
 
 ## 1.0.3 - 2026-08-10
 - Added: pr-summary --base flag to override the auto-detected base branch
