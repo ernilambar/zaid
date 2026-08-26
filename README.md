@@ -104,6 +104,7 @@ bun src/index.mjs shell-cmd "list files ordered by file size"
 bun src/index.mjs function-info "wp_head()"
 bun src/index.mjs pr-summary
 bun src/index.mjs proofread "Their are many reasons why this is importent."
+bun src/index.mjs proofread "hey sorry i missed your email" --style formal
 bun src/index.mjs email-writer "tell client the deadline moved to friday"
 bun src/index.mjs regex "a date in YYYY-MM-DD format"
 bun src/index.mjs nepali-writer "Hello, how are you? Nice to meet you."

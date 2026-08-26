@@ -141,3 +141,44 @@ test('summarize fails fast when there is no readable text', () => {
   assert.equal(result.status, 1)
   assert.deepEqual(JSON.parse(result.stdout), { error: 'summarize: no readable text found.' })
 })
+
+test('proofread --help documents the --style option with its valid choices', () => {
+  const result = run(['proofread', '--help'])
+  assert.equal(result.status, 0)
+  assert.match(result.stdout, /--style/)
+  for (const choice of ['professional', 'formal', 'friendly', 'neutral', 'empathetic', 'assertive']) {
+    assert.match(result.stdout, new RegExp(`\\b${choice}\\b`))
+  }
+})
+
+test('proofread rejects an invalid --style value with a helpful error', () => {
+  const result = run(['proofread', 'hello world', '--style', 'flirty'], {
+    env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+  })
+  assert.equal(result.status, 1)
+  assert.match(result.stderr, /Invalid values/)
+  assert.match(result.stderr, /professional.*formal.*friendly.*neutral.*empathetic.*assertive/)
+})
+
+test('proofread --style case-sensitive: capitalised style is rejected', () => {
+  const result = run(['proofread', 'hello world', '--style', 'Formal'], {
+    env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+  })
+  assert.equal(result.status, 1)
+  assert.match(result.stderr, /Invalid values/)
+})
+
+test('proofread with no argument and no piped stdin prints usage and exits 0 without requiring a style', () => {
+  const result = run(['proofread'])
+  assert.equal(result.status, 0)
+  assert.match(result.stdout, /Usage: zaid proofread/)
+})
+
+test('proofread --json does not expose style on the top-level usage error (no input)', () => {
+  const result = run(['proofread', '--json'], {
+    env: cleanEnv({ ZAID_BASE_URL: 'http://127.0.0.1:9999/v1', ZAID_MODEL: 'x' })
+  })
+  assert.equal(result.status, 0)
+  const parsed = JSON.parse(result.stdout)
+  assert.match(parsed.error, /Usage: zaid proofread/)
+})
