@@ -1,6 +1,6 @@
 import 'zx/globals'
 import { spinner } from 'zx'
-import { getRawClient, printJson } from '../lib/ai.mjs'
+import { getRawClient, getErrorMessage, printJson } from '../lib/ai.mjs'
 import { commonOptions } from '../lib/cli.mjs'
 
 export const command = 'status'
@@ -47,9 +47,9 @@ export async function handler (argv) {
     }
   } catch (error) {
     if (json) {
-      printJson({ baseUrl: baseURL, configuredModel: process.env.ZAID_MODEL || null, connected: false, error: error.message })
+      printJson({ baseUrl: baseURL, configuredModel: process.env.ZAID_MODEL || null, connected: false, error: getErrorMessage(error) })
     } else {
-      console.log(chalk.red(`zaid status: failed to reach ${baseURL}: ${error.message}`))
+      console.log(chalk.red(`zaid status: failed to reach ${baseURL}: ${getErrorMessage(error)}`))
     }
     process.exit(1)
   }

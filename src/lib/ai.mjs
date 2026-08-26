@@ -11,6 +11,18 @@ export function echoInput (text) {
   }
 }
 
+export function getErrorMessage (error) {
+  let current = error
+  while (current) {
+    const message = current.message
+    if (message && !/^(Connection error\.|fetch failed)$/.test(message)) {
+      return message
+    }
+    current = current.cause
+  }
+  return error?.message || 'Unknown error'
+}
+
 export function fail (message, json = false) {
   if (json) {
     printJson({ error: message })
@@ -81,25 +93,29 @@ export function getRawClient (json = false) {
 }
 
 export async function aiRequest ({ system, prompt, model, temperature = 0.3, spinnerText = 'Thinking...', json = false }) {
-  const { client, model: resolvedModel } = getClient(model, json)
+  try {
+    const { client, model: resolvedModel } = getClient(model, json)
 
-  const run = async () => {
-    const response = await client.chat.completions.create({
-      model: resolvedModel,
-      stream: false,
-      temperature,
-      messages: [
-        ...(system ? [{ role: 'system', content: system }] : []),
-        { role: 'user', content: prompt }
-      ]
-    })
+    const run = async () => {
+      const response = await client.chat.completions.create({
+        model: resolvedModel,
+        stream: false,
+        temperature,
+        messages: [
+          ...(system ? [{ role: 'system', content: system }] : []),
+          { role: 'user', content: prompt }
+        ]
+      })
 
-    const content = response.choices[0]?.message?.content?.trim() || ''
+      const content = response.choices[0]?.message?.content?.trim() || ''
 
-    return json ? { content, model: resolvedModel, usage: response.usage ?? null } : content
+      return json ? { content, model: resolvedModel, usage: response.usage ?? null } : content
+    }
+
+    return json ? await run() : await spinner(spinnerText, run)
+  } catch (error) {
+    fail(`failed to reach the endpoint: ${getErrorMessage(error)}`, json)
   }
-
-  return json ? await run() : await spinner(spinnerText, run)
 }
 
 export async function aiStreamRequest ({ system, prompt, model, temperature = 0.3, spinnerText = 'Thinking...', json = false }) {
@@ -107,43 +123,47 @@ export async function aiStreamRequest ({ system, prompt, model, temperature = 0.
     return await aiRequest({ system, prompt, model, temperature, json: true })
   }
 
-  const { client, model: resolvedModel } = getClient(model)
+  try {
+    const { client, model: resolvedModel } = getClient(model)
 
-  const { iterator, first } = await spinner(spinnerText, async () => {
-    const stream = await client.chat.completions.create({
-      model: resolvedModel,
-      stream: true,
-      temperature,
-      messages: [
-        ...(system ? [{ role: 'system', content: system }] : []),
-        { role: 'user', content: prompt }
-      ]
+    const { iterator, first } = await spinner(spinnerText, async () => {
+      const stream = await client.chat.completions.create({
+        model: resolvedModel,
+        stream: true,
+        temperature,
+        messages: [
+          ...(system ? [{ role: 'system', content: system }] : []),
+          { role: 'user', content: prompt }
+        ]
+      })
+
+      const iterator = stream[Symbol.asyncIterator]()
+
+      let result = await iterator.next()
+      while (!result.done && !result.value.choices[0]?.delta?.content) {
+        result = await iterator.next()
+      }
+
+      return { iterator, first: result }
     })
 
-    const iterator = stream[Symbol.asyncIterator]()
+    let fullContent = ''
 
-    let result = await iterator.next()
-    while (!result.done && !result.value.choices[0]?.delta?.content) {
+    const write = (chunk) => {
+      const text = chunk.choices[0]?.delta?.content || ''
+      process.stdout.write(text)
+      fullContent += text
+    }
+
+    let result = first
+    while (!result.done) {
+      write(result.value)
       result = await iterator.next()
     }
 
-    return { iterator, first: result }
-  })
-
-  let fullContent = ''
-
-  const write = (chunk) => {
-    const text = chunk.choices[0]?.delta?.content || ''
-    process.stdout.write(text)
-    fullContent += text
+    process.stdout.write('\n')
+    return fullContent
+  } catch (error) {
+    fail(`failed to reach the endpoint: ${getErrorMessage(error)}`, json)
   }
-
-  let result = first
-  while (!result.done) {
-    write(result.value)
-    result = await iterator.next()
-  }
-
-  process.stdout.write('\n')
-  return fullContent
 }
