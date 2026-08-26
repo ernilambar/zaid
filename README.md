@@ -109,6 +109,7 @@ bun src/index.mjs regex "a date in YYYY-MM-DD format"
 bun src/index.mjs nepali-writer "Hello, how are you? Nice to meet you."
 bun src/index.mjs summarize https://example.com/article
 bun src/index.mjs explain-error "npm ERR! code ENOENT"
+bun src/index.mjs man "git log"
 bun src/index.mjs status
 ```
 

@@ -1,5 +1,9 @@
 # Zaid Changelog
 
+## 1.0.5 - 2026-08-26
+- Added: `man` command to explain shell commands and common flags
+- Changed: endpoint errors now fail gracefully with the underlying cause instead of a stack trace
+
 ## 1.0.4 - 2026-08-22
 - Changed: clarify the task for "nepali-writer" command
 - Changed: echo command input only on TTY

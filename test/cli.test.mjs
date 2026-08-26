@@ -19,6 +19,7 @@ const SUBCOMMANDS = [
   'nepali-writer',
   'summarize',
   'explain-error',
+  'man',
   'status'
 ]
 

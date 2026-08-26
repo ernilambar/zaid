@@ -10,6 +10,7 @@ import * as regex from './commands/regex.mjs'
 import * as nepaliWriter from './commands/nepali-writer.mjs'
 import * as summarize from './commands/summarize.mjs'
 import * as explainError from './commands/explain-error.mjs'
+import * as man from './commands/man.mjs'
 import * as status from './commands/status.mjs'
 
 runCli([
@@ -23,5 +24,6 @@ runCli([
   nepaliWriter,
   summarize,
   explainError,
+  man,
   status
 ])
