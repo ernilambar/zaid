@@ -18,8 +18,8 @@
   },
   "scripts": {
     "compile": "bun build ./src/index.mjs --compile --outfile zaid",
-    "format": "standard --fix",
-    "lint": "standard",
+    "format": "eslint --fix",
+    "lint": "eslint",
     "test": "node --test",
     "validate-changelog": "flatlog validate",
     "version": "easy-replace-in-files"
@@ -34,16 +34,10 @@
   "devDependencies": {
     "@nilambar/flatlog": "^1.0.4",
     "easy-replace-in-files": "^2.0.0",
-    "standard": "^17.1.2"
+    "eslint": "^9.39.5",
+    "neostandard": "^0.13.0"
   },
   "engines": {
     "node": ">=22"
-  },
-  "standard": {
-    "globals": [
-      "$",
-      "chalk",
-      "fs"
-    ]
   }
 }
