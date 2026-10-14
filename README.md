@@ -12,7 +12,7 @@ brew trust ernilambar/tap
 brew install ernilambar/tap/zaid
 ```
 
-**macOS** — prebuilt binary (replace `arm64` with `amd64` for Intel Macs):
+**macOS** — prebuilt binary (Apple Silicon):
 
 ```bash
 curl -fL -o zaid https://github.com/ernilambar/zaid/releases/latest/download/zaid-darwin-arm64
@@ -123,8 +123,6 @@ git tag v1.0.1
 git push origin v1.0.1
 ```
 
-## Copyright and License
+## License
 
-This project is licensed under the [MIT](http://opensource.org/licenses/MIT).
-
-2026 &copy; [Nilambar Sharma](https://www.nilambar.net).
+[MIT](LICENSE) © [Nilambar Sharma](https://www.nilambar.net)

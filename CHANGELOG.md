@@ -1,5 +1,11 @@
 # Zaid Changelog
 
+## 2.0.0 - 2026-10-14
+- Changed: macOS prebuilt releases are now Apple Silicon (arm64) only, dropping Intel (x64) support
+- Changed: replaced the `standard` linter with `eslint` and `neostandard`
+- Changed: updated dependencies
+- Fixed: macOS binaries are built on macOS runners so they are properly signed
+
 ## 1.0.5 - 2026-08-26
 - Added: `man` command to explain shell commands and common flags
 - Added: `proofread --style` flag to rewrite in a specific tone
