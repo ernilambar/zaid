@@ -9,14 +9,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - target: bun-darwin-arm64
-            suffix: darwin-arm64
-          - target: bun-darwin-x64
-            suffix: darwin-amd64
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
@@ -29,12 +22,17 @@ jobs:
       - name: Build
         run: |
           mkdir -p dist
-          bun build --compile --target=${{ matrix.target }} --minify ./src/index.mjs --outfile dist/zaid-${{ matrix.suffix }}
+          bun build --compile --target=bun-darwin-arm64 --minify ./src/index.mjs --outfile dist/zaid-darwin-arm64
+
+      - name: Verify signature and smoke test
+        run: |
+          codesign --verify dist/zaid-darwin-arm64
+          ./dist/zaid-darwin-arm64 --version
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: zaid-${{ matrix.suffix }}
+          name: zaid-darwin-arm64
           path: dist/*
 
   release:
