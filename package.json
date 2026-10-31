@@ -26,16 +26,16 @@
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
-    "linkedom": "^0.18.13",
-    "openai": "^7.30.0",
+    "linkedom": "^0.18.14",
+    "openai": "^7.43.0",
     "yargs": "^18.2.0",
     "zx": "^8.8.5"
   },
   "devDependencies": {
-    "@nilambar/flatlog": "^2.0.0",
+    "@nilambar/flatlog": "^2.0.1",
     "easy-replace-in-files": "^2.0.0",
-    "eslint": "^9.39.5",
-    "neostandard": "^0.13.0"
+    "eslint": "^10.13.0",
+    "neostandard": "^0.14.1"
   },
   "engines": {
     "node": ">=22"
