@@ -1,6 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { spawnSync } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
+import { createServer } from 'node:http'
 import { fileURLToPath } from 'node:url'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -34,6 +35,19 @@ function run (args, { input = '', env, cwd } = {}) {
     input,
     env: env ?? cleanEnv(),
     cwd
+  })
+}
+
+function runAsync (args, { env } = {}) {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [CLI, ...args], { env: env ?? cleanEnv() })
+    let stdout = ''
+    let stderr = ''
+    child.stdout.setEncoding('utf8')
+    child.stderr.setEncoding('utf8')
+    child.stdout.on('data', (chunk) => { stdout += chunk })
+    child.stderr.on('data', (chunk) => { stderr += chunk })
+    child.on('close', (status) => resolve({ status, stdout, stderr }))
   })
 }
 
@@ -181,4 +195,48 @@ test('proofread --json does not expose style on the top-level usage error (no in
   assert.equal(result.status, 0)
   const parsed = JSON.parse(result.stdout)
   assert.match(parsed.error, /Usage: zaid proofread/)
+})
+
+test('chat and status requests both carry an x-opencode-session header', async () => {
+  const sessions = []
+  const server = createServer((req, res) => {
+    sessions.push(req.headers['x-opencode-session'])
+    req.resume()
+    req.on('end', () => {
+      res.setHeader('content-type', 'application/json')
+      if (req.url.endsWith('/models')) {
+        res.end(JSON.stringify({ object: 'list', data: [] }))
+        return
+      }
+      res.end(JSON.stringify({
+        id: 'chatcmpl-test',
+        object: 'chat.completion',
+        created: 0,
+        model: 'test-model',
+        choices: [{ index: 0, message: { role: 'assistant', content: 'ok' }, finish_reason: 'stop' }],
+        usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 }
+      }))
+    })
+  })
+
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
+  const baseURL = `http://127.0.0.1:${server.address().port}/v1`
+  const env = cleanEnv({ ZAID_BASE_URL: baseURL, ZAID_MODEL: 'test-model' })
+
+  try {
+    const ask = await runAsync(['ask', 'hello', '--json'], { env })
+    assert.equal(ask.status, 0, ask.stderr)
+    assert.match(JSON.parse(ask.stdout).output, /ok/)
+
+    const status = await runAsync(['status', '--json'], { env })
+    assert.equal(status.status, 0, status.stderr)
+
+    assert.equal(sessions.length, 2)
+    for (const session of sessions) {
+      assert.match(session, /^ses_[0-9a-f]{32}$/)
+    }
+    assert.notEqual(sessions[0], sessions[1])
+  } finally {
+    await new Promise((resolve) => server.close(resolve))
+  }
 })

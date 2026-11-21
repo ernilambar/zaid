@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { requireBaseUrl, requireAiConfig, printJson } from '../src/lib/ai.mjs'
+import { requireBaseUrl, requireAiConfig, printJson, defaultHeaders } from '../src/lib/ai.mjs'
 
 test('requireBaseUrl returns the configured base URL', () => {
   process.env.ZAID_BASE_URL = 'http://example.test/v1'
@@ -20,6 +20,15 @@ test('requireAiConfig returns the base URL when ZAID_MODEL is set', () => {
   assert.equal(requireAiConfig(undefined), 'http://example.test/v1')
   delete process.env.ZAID_BASE_URL
   delete process.env.ZAID_MODEL
+})
+
+test('defaultHeaders sets an OpenCode session id in the expected shape', () => {
+  const session = defaultHeaders()['x-opencode-session']
+  assert.match(session, /^ses_[0-9a-f]{32}$/)
+})
+
+test('defaultHeaders generates a distinct session id per request', () => {
+  assert.notEqual(defaultHeaders()['x-opencode-session'], defaultHeaders()['x-opencode-session'])
 })
 
 test('printJson writes compact single-line JSON to stdout', () => {

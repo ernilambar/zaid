@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import { spinner } from 'zx'
 import OpenAI from 'openai'
 
@@ -75,12 +76,20 @@ export async function getInput (argv, usage) {
   return text
 }
 
+export function defaultHeaders () {
+  return { 'x-opencode-session': `ses_${randomBytes(16).toString('hex')}` }
+}
+
+function createClient (baseURL, apiKey) {
+  return new OpenAI({ baseURL, apiKey, defaultHeaders: defaultHeaders() })
+}
+
 function getClient (modelOverride, json = false) {
   const baseURL = requireAiConfig(modelOverride, json)
   const apiKey = process.env.ZAID_API_KEY || 'local'
   const model = modelOverride || process.env.ZAID_MODEL
 
-  const client = new OpenAI({ baseURL, apiKey })
+  const client = createClient(baseURL, apiKey)
   return { client, model }
 }
 
@@ -88,7 +97,7 @@ export function getRawClient (json = false) {
   const baseURL = requireBaseUrl(json)
   const apiKey = process.env.ZAID_API_KEY || 'local'
 
-  const client = new OpenAI({ baseURL, apiKey })
+  const client = createClient(baseURL, apiKey)
   return { client, baseURL }
 }
 
