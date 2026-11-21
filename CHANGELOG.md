@@ -1,4 +1,7 @@
-# Zaid Changelog
+# Changelog
+
+## 2.0.1 - 2026-11-21
+- Fixed: requests now send the `x-opencode-session` header required by OpenCode Go/Zen (400 `MissingSessionID`)
 
 ## 2.0.0 - 2026-10-14
 - Changed: macOS prebuilt releases are now Apple Silicon (arm64) only, dropping Intel (x64) support
